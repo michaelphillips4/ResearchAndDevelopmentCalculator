@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Research and Development Calculator</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="Data.js"></script>
+    <script src="Calculator.js"></script>
+    <script src="RandDController.js"></script>
+  </head>
+
+  <body>
+    <main>
+      <h1>Research and Development Calculator</h1>
+
+      <div ng-app="RDApp" ng-controller="RDController">
+        <section>
+          <label>Which scheme are you eligible for?</label>
+
+          <div class="flex-input">
+            <div class="item">
+              <input ng-model="isSmallCompany" value="true" type="radio" />
+              <label>SME Scheme</label>
+            </div>
+            <div class="item">
+              <input ng-model="isSmallCompany" value="false" type="radio" />
+              <label>Large Scheme</label>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <label for="profitability"
+            >Is your company making a profit or making a loss?</label
+          >
+
+          <div class="flex-input">
+            <div class="item">
+              <input
+                id="profitable"
+                ng-model="isProfitMaking"
+                value="true"
+                type="radio"
+              />
+              <label for="profitable">Profit making</label>
+            </div>
+            <div class="item">
+              <input
+                id="lossmaking"
+                ng-model="isProfitMaking"
+                value="false"
+                type="radio"
+              />
+              <label for="lossmaking">Loss making</label>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <label>Please enter accounting period start date.</label>
+
+          <div class="flex-input">
+            <div class="item">
+              <select ng-model="startDay">
+                <option ng-repeat="d in startDays" value="{{ d + 1 }}">
+                  {{ d + 1 }}
+                </option>
+              </select>
+            </div>
+
+            <div class="item">
+              <select ng-model="startMonth" ng-change="startMonthChange()">
+                <option ng-repeat="m in months" value="{{ m.value }}">
+                  {{ m.name }}
+                </option>
+              </select>
+            </div>
+
+            <div class="item">
+              <select ng-model="startYear">
+                <option ng-repeat="y in years" value="{{ y }}">
+                  {{ y }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <label>Period end date</label>
+
+          <div class="flex-input">
+            <div class="item">
+              <select ng-model="endDay">
+                <option ng-repeat="d in endDays" value="{{ d + 1 }}">
+                  {{ d + 1 }}
+                </option>
+              </select>
+            </div>
+
+            <div class="item">
+              <select ng-model="endMonth" ng-change="endMonthChange()">
+                <option ng-repeat="m in months" value="{{ m.value }}">
+                  {{ m.name }}
+                </option>
+              </select>
+            </div>
+
+            <div class="item">
+              <select ng-model="endYear">
+                <option ng-repeat="y in years" value="{{ y }}">
+                  {{ y }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <label for="mini-inputRangeTextQ3">
+            Enter the amount you spent in your last accounting period on R&amp;D
+            staff and consumable items (materials, electricity, component parts
+            etc).
+          </label>
+
+          <div class="flex-input">
+            <div class="item">
+              <input
+                ng-model="inputQ3"
+                min="0"
+                max="1000000"
+                step="25000"
+                type="range"
+              />
+            </div>
+
+            <div class="item">
+              <input
+                type="text"
+                disabled
+                value="{{ inputQ3 | currency: '£' }}"
+              />
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <label for="mini-inputRangeTextQ4">
+            Enter the amount you spent in your last accounting period on
+            sub-contractors, freelancers, and agency workers working on R&amp;D
+            projects.</label
+          >
+          <div class="flex-input">
+            <div class="item">
+              <input
+                ng-model="inputQ4"
+                min="0"
+                max="1000000"
+                step="25000"
+                type="range"
+              />
+            </div>
+            <div class="item">
+              <input
+                type="text"
+                disabled
+                value="{{ inputQ4 | currency: '£' }}"
+              />
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <label>
+            The above represent 40% or more of total spend in the accounting
+            period. SME's are classed as R&amp;D intensive if their qualifying
+            R&amp;D expenditure covers at least 40% of their total spending
+            during a given financial period.
+          </label>
+
+          <div class="flex-input">
+            <div class="item">
+              <input
+                ng-model="isTotalSpendOfMoreThan40"
+                value="true"
+                type="radio"
+              />
+              <label for="yesTotalSpendOfMoreThan40">Yes</label>
+            </div>
+            <div class="item">
+              <input
+                ng-model="isTotalSpendOfMoreThan40"
+                value="false"
+                type="radio"
+              />
+              <label for="noTotalSpendOfMoreThan40">No</label>
+            </div>
+          </div>
+        </section>
+
+        <hr />
+
+        <h3>Total Saving up to : {{ result() | currency: '£' }}</h3>
+        <h3>Fees : {{ fee | currency: '£' }}</h3>
+        <h2>NET Savings up to: {{ net | currency: '£' }}</h2>
+        <p>
+          Estimated corporation tax savings This R&amp;D tax credits calculator
+          provides an estimate of the corporation tax savings you may be
+          entitled to.
+        </p>
+
+        <details>
+          <summary>Debug info</summary>
+          <ul>
+            <li>SME Company : {{ isSmallCompany }}</li>
+            <li>Profit Making : {{ isProfitMaking }}</li>
+            <li>
+              Start Date :
+              {{ getStartDate().toLocaleDateString() }}
+            </li>
+            <li>End Date : {{ getEndDate().toLocaleDateString() }}</li>
+            <li>Costs : {{ inputQ3 | currency: '£' }}</li>
+            <li>Sub contractor costs : {{ inputQ4 | currency: '£' }}</li>
+            <li>
+              Total Spend Of More Than 40% : {{ isTotalSpendOfMoreThan40 }}
+            </li>
+            <li>Saving : {{ result() | currency: '£' }}</li>
+            <li>Fee : {{ fee | currency: '£' }}</li>
+            <li>Net Cost : {{ net | currency: '£' }}</li>
+          </ul>
+          <a href="tests.html">jasmine tests</a>
+        </details>
+      </div>
+    </main>
+  </body>
+</html>

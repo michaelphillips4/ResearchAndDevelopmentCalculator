@@ -1,0 +1,1240 @@
+<!-- Include Jasmine in your HTML -->
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/jasmine-core@3.10.0/lib/jasmine-core/jasmine.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/jasmine-core@3.10.0/lib/jasmine-core/jasmine.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jasmine-core@3.10.0/lib/jasmine-core/jasmine-html.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jasmine-core@3.10.0/lib/jasmine-core/boot.js"></script>
+<script src="Data.js"></script>
+<script src="Calculator.js"></script>
+<!-- Write your test code in a script tag or external file -->
+<script>
+  const calculator = new Calculator()
+
+  describe('getNumberOfDaysInRange method tests', function () {
+    it('getNumberOfDaysInRange ', function () {
+      const a = calculator.daysBetweenRange(
+        new Date(2022, 0, 1),
+        new Date(2022, 11, 31),
+        new Date(2010, 0, 1),
+        rate1EndDate
+      )
+
+      expect(364).toBe(a)
+
+      const b = calculator.daysBetweenRange(
+        new Date(2023, 0, 1),
+        new Date(2023, 11, 31),
+        rate2StartDate,
+        rate2EndDate
+      )
+
+      expect(275).toBe(b)
+
+      const c = calculator.daysBetweenRange(
+        new Date(2023, 0, 1),
+        new Date(2023, 11, 31),
+        new Date(2010, 0, 1),
+        rate1EndDate
+      )
+
+      expect(90).toBe(c)
+
+      const d = calculator.daysBetweenRange(
+        new Date(2024, 6, 1),
+        new Date(2024, 6, 2),
+        rate3StartDate,
+        new Date(3000, 0, 1)
+      )
+
+      expect(1).toBe(d)
+
+      const e = calculator.daysBetweenRange(
+        new Date(2022, 6, 1),
+        new Date(2023, 5, 30),
+        rate2StartDate,
+        rate2EndDate
+      )
+
+      expect(90).toBe(e)
+    })
+  })
+
+  describe('SME & RDEC Schemes Old Rates 01/04/2022 to 31/03/2023', function () {
+    const startDate = new Date(2022, 3, 1)
+    const endDate = new Date(2023, 2, 31)
+
+    it('£100000 small company in profit', function () {
+      const isSmallCompany = true
+      const isInProfit = true
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        0,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(24700).toBe(totalSaving)
+    })
+
+    it('£100000 small company not in profit', function () {
+      const isSmallCompany = true
+      const isInProfit = false
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        0,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(33350).toBe(totalSaving)
+    })
+
+    it('£100000 small company not in profit R&D intensive ', function () {
+      const isSmallCompany = true
+      const isInProfit = false
+      const isTotalSpendOfMoreThan40 = true
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        0,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(33350).toBe(totalSaving)
+    })
+
+    it('£100000 large company in profit ', function () {
+      const isSmallCompany = false
+      const isInProfit = true
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        0,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(10500).toBe(totalSaving)
+    })
+
+    it('£100000 large company not in profit ', function () {
+      const isSmallCompany = false
+      const isInProfit = false
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        0,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(10500).toBe(totalSaving)
+    })
+  })
+
+  describe('SME & RDEC Schemes New Rates - expenditure from 01/04/23', function () {
+    const startDate = new Date(2023, 3, 1)
+    const endDate = new Date(2024, 2, 31)
+
+    it('£100000 small company in profit', function () {
+      const isSmallCompany = true
+      const isInProfit = true
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        0,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(21500).toBe(totalSaving)
+    })
+
+    it('£100000 small company not in profit R&D intensive ', function () {
+      const isSmallCompany = true
+      const isInProfit = false
+      const isTotalSpendOfMoreThan40 = true
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        0,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(26970).toBe(totalSaving)
+    })
+
+    it('£100000 small company not in profit', function () {
+      const isSmallCompany = true
+      const isInProfit = false
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        0,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(18600).toBe(totalSaving)
+    })
+
+    it('£100000 large company in profit ', function () {
+      const isSmallCompany = false
+      const isInProfit = true
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        0,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(16200).toBe(totalSaving)
+    })
+
+    it('£100000 large company not in profit ', function () {
+      const isSmallCompany = false
+      const isInProfit = false
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        0,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(16200).toBe(totalSaving)
+    })
+  })
+
+  describe('Merged Scheme - accounting periods from 01/04/24', function () {
+    const startDate = new Date(2024, 3, 1)
+    const endDate = new Date(2025, 2, 31)
+
+    it('£100000 small company in profit', function () {
+      const isSmallCompany = true
+      const isInProfit = true
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        0,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(16200).toBe(totalSaving)
+    })
+
+    it('£100000 small company not in profit R&D intensive ', function () {
+      const isSmallCompany = true
+      const isInProfit = false
+      const isTotalSpendOfMoreThan40 = true
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        0,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(26970).toBe(totalSaving)
+    })
+
+    it('£100000 small company not in profit', function () {
+      const isSmallCompany = true
+      const isInProfit = false
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        0,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(16200).toBe(totalSaving)
+    })
+
+    it('£100000 large company in profit ', function () {
+      const isSmallCompany = false
+      const isInProfit = true
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        0,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(15000).toBe(totalSaving)
+    })
+
+    it('£100000 large company not in profit ', function () {
+      const isSmallCompany = false
+      const isInProfit = false
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        0,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(15000).toBe(totalSaving)
+    })
+  })
+
+  describe('SME & RDEC Schemes Old Rates - expenditure up to 31/03/23', function () {
+    const startDate = new Date(2022, 3, 1)
+    const endDate = new Date(2023, 2, 31)
+
+    it('£100000 small company in profit', function () {
+      const isSmallCompany = true
+      const isInProfit = true
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(40755).toBe(totalSaving)
+    })
+
+    it('£100000 small company not in profit R&D intensive ', function () {
+      const isSmallCompany = true
+      const isInProfit = false
+      const isTotalSpendOfMoreThan40 = true
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(55027.5).toBe(totalSaving)
+    })
+
+    it('£100000 small company not in profit', function () {
+      const isSmallCompany = true
+      const isInProfit = false
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(55027.5).toBe(totalSaving)
+    })
+
+    it('£100000 large company in profit ', function () {
+      const isSmallCompany = false
+      const isInProfit = true
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(10500).toBe(totalSaving)
+    })
+
+    it('£100000 large company not in profit ', function () {
+      const isSmallCompany = false
+      const isInProfit = false
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(10500).toBe(totalSaving)
+    })
+  })
+
+  describe('SME & RDEC Schemes New Rates - expenditure from 01/04/23', function () {
+    const startDate = new Date(2023, 3, 1)
+    const endDate = new Date(2024, 2, 31)
+
+    it('£100000 small company in profit', function () {
+      const isSmallCompany = true
+      const isInProfit = true
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(35475).toBe(totalSaving)
+    })
+
+    it('£100000 small company not in profit R&D intensive ', function () {
+      const isSmallCompany = true
+      const isInProfit = false
+      const isTotalSpendOfMoreThan40 = true
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(44500.5).toBe(totalSaving)
+    })
+
+    it('£100000 small company not in profit', function () {
+      const isSmallCompany = true
+      const isInProfit = false
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(30690).toBe(Math.round(totalSaving))
+    })
+
+    it('£100000 large company in profit ', function () {
+      const isSmallCompany = false
+      const isInProfit = true
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(16200).toBe(totalSaving)
+    })
+
+    it('£100000 large company not in profit ', function () {
+      const isSmallCompany = false
+      const isInProfit = false
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(16200).toBe(Math.round(totalSaving))
+    })
+  })
+
+  describe('Merged Scheme - accounting periods from 01/04/24', function () {
+    const startDate = new Date(2024, 3, 1)
+    const endDate = new Date(2025, 2, 31)
+
+    it('£100000 small company in profit', function () {
+      const isSmallCompany = true
+      const isInProfit = true
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(26730).toBe(totalSaving)
+    })
+
+    it('£100000 small company not in profit R&D intensive ', function () {
+      const isSmallCompany = true
+      const isInProfit = false
+      const isTotalSpendOfMoreThan40 = true
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(44500.5).toBe(totalSaving)
+    })
+
+    it('£100000 small company not in profit', function () {
+      const isSmallCompany = true
+      const isInProfit = false
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(26730).toBe(Math.round(totalSaving))
+    })
+
+    it('£100000 large company in profit ', function () {
+      const isSmallCompany = false
+      const isInProfit = true
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(24750).toBe(totalSaving)
+    })
+
+    it('£100000 large company not in profit ', function () {
+      const isSmallCompany = false
+      const isInProfit = false
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(24750).toBe(Math.round(totalSaving))
+    })
+  })
+
+  describe('SME & RDEC Schemes Old Rates', function () {
+    const startDate = new Date(2022, 0, 1)
+    const endDate = new Date(2022, 11, 31)
+
+    it('£100000 small company in profit', function () {
+      const isSmallCompany = true
+      const isInProfit = true
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(40755).toBe(totalSaving)
+    })
+
+    it('£100000 small company not in profit R&D intensive ', function () {
+      const isSmallCompany = true
+      const isInProfit = false
+      const isTotalSpendOfMoreThan40 = true
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(55027.5).toBe(totalSaving)
+    })
+
+    it('£100000 small company not in profit', function () {
+      const isSmallCompany = true
+      const isInProfit = false
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(55027.5).toBe(totalSaving)
+    })
+
+    it('£100000 large company in profit ', function () {
+      const isSmallCompany = false
+      const isInProfit = true
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(10500).toBe(totalSaving)
+    })
+
+    it('£100000 large company not in profit ', function () {
+      const isSmallCompany = false
+      const isInProfit = false
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(10500).toBe(Math.round(totalSaving))
+    })
+  })
+
+  describe('SME & RDEC Schemes Old Rates + New Rates', function () {
+    const startDate = new Date(2023, 0, 1)
+    const endDate = new Date(2023, 11, 31)
+
+    it('£100000 small company in profit', function () {
+      const isSmallCompany = true
+      const isInProfit = true
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(36776.92).toBe(totalSaving)
+    })
+
+    it('£100000 small company not in profit R&D intensive ', function () {
+      const isSmallCompany = true
+      const isInProfit = false
+      const isTotalSpendOfMoreThan40 = true
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(47096.2).toBe(totalSaving)
+    })
+
+    it('£100000 small company not in profit', function () {
+      const isSmallCompany = true
+      const isInProfit = false
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(36691.03).toBe(totalSaving)
+    })
+
+    it('£100000 large company in profit ', function () {
+      const isSmallCompany = false
+      const isInProfit = true
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(14794.52).toBe(totalSaving)
+    })
+
+    it('£100000 large company not in profit ', function () {
+      const isSmallCompany = false
+      const isInProfit = false
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(14794.52).toBe(totalSaving)
+    })
+  })
+
+
+  const dataSet1 = {
+    name: 'SME & RDEC Schemes Old Rates + New Rates (rate change 01/04/24)',
+    startDate: new Date(2022, 6, 1),
+    endDate: new Date(2023, 5, 30),
+    tests: [39449.51, 52424.67, 49009.99, 11909.34, 11909.34]
+  }
+
+  const dataSet2 = {
+    name: 'SME & RDEC Schemes New Rates (expenditure begins after 01/04/23)',
+    startDate: new Date(2023, 6, 1),
+    endDate: new Date(2024, 5, 30),
+    tests: [35475, 44500.5, 30690, 16200, 16200]
+  }
+
+  const dataSet3 = {
+    name: 'Merged Scheme (accounting period begins after 01/04/24)',
+    startDate: new Date(2024, 6, 1),
+    endDate: new Date(2025, 5, 30),
+    tests: [26730, 44500.5, 26730, 24750, 24750]
+  }
+
+  const tests = [dataSet1, dataSet2, dataSet3]
+
+  tests.forEach(dataSet => {
+    describe(dataSet.name, function () {
+      const calculator = new Calculator()
+
+      it(`startDate:${dataSet.startDate.toLocaleDateString()} 
+      endDate:${dataSet.endDate.toLocaleDateString()} 
+      input3:100000 
+      input4:100000 
+      isSmallCompany:true 
+      isInProfit:true
+      isTotalSpendOfMoreThan40:true`, function () {
+        const totalSaving = calculator.calculateRDTaxSaving(
+          dataSet.startDate,
+          dataSet.endDate,
+          100000,
+          100000,
+          true,
+          true,
+          true
+        )
+
+        expect(dataSet.tests[0]).toBe(totalSaving)
+      })
+
+      it(`startDate:${dataSet.startDate.toLocaleDateString()} 
+      endDate:${dataSet.endDate.toLocaleDateString()} 
+      input3:100000 
+      input4:100000 
+      isSmallCompany:true 
+      isInProfit:false
+      isTotalSpendOfMoreThan40:true`, function () {
+        const totalSaving = calculator.calculateRDTaxSaving(
+          dataSet.startDate,
+          dataSet.endDate,
+          100000,
+          100000,
+          true,
+          false,
+          true
+        )
+
+        expect(dataSet.tests[1]).toBe(totalSaving)
+      })
+
+      it(`startDate:${dataSet.startDate.toLocaleDateString()} 
+      endDate:${dataSet.endDate.toLocaleDateString()} 
+      input3:100000 
+      input4:100000 
+      isSmallCompany:true 
+      isInProfit:false
+      isTotalSpendOfMoreThan40:false`, function () {
+        const totalSaving = calculator.calculateRDTaxSaving(
+          dataSet.startDate,
+          dataSet.endDate,
+          100000,
+          100000,
+          true,
+          false,
+          false
+        )
+
+        expect(dataSet.tests[2]).toBe(totalSaving)
+      })
+
+      it(`startDate:${dataSet.startDate.toLocaleDateString()} 
+      endDate:${dataSet.endDate.toLocaleDateString()} 
+      input3:100000 
+      input4:100000 
+      isSmallCompany:false 
+      isInProfit:true
+      isTotalSpendOfMoreThan40:false`, function () {
+        const totalSaving = calculator.calculateRDTaxSaving(
+          dataSet.startDate,
+          dataSet.endDate,
+          100000,
+          100000,
+          false,
+          true,
+          false
+        )
+
+        expect(dataSet.tests[3]).toBe(totalSaving)
+      })
+
+      it(`startDate:${dataSet.startDate.toLocaleDateString()} 
+      endDate:${dataSet.endDate.toLocaleDateString()} 
+      input3:100000 
+      input4:100000 
+      isSmallCompany:false 
+      isInProfit:false
+      isTotalSpendOfMoreThan40:false`, function () {
+        const totalSaving = calculator.calculateRDTaxSaving(
+          dataSet.startDate,
+          dataSet.endDate,
+          100000,
+          100000,
+          false,
+          false,
+          false
+        )
+
+        expect(dataSet.tests[4]).toBe(totalSaving)
+      })
+    })
+  })
+
+
+  describe('SME & RDEC Schemes New Rates', function () {
+    const startDate = new Date(2024, 0, 1)
+    const endDate = new Date(2024, 11, 31)
+
+    it('£100000 small company in profit', function () {
+      const isSmallCompany = true
+      const isInProfit = true
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(35475).toBe(totalSaving)
+    })
+
+    it('£100000 small company not in profit R&D intensive ', function () {
+      const isSmallCompany = true
+      const isInProfit = false
+      const isTotalSpendOfMoreThan40 = true
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(44500.5).toBe(totalSaving)
+    })
+
+    it('£100000 small company not in profit', function () {
+      const isSmallCompany = true
+      const isInProfit = false
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(30690).toBe(totalSaving)
+    })
+
+    it('£100000 large company in profit ', function () {
+      const isSmallCompany = false
+      const isInProfit = true
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(16200).toBe(totalSaving)
+    })
+
+    it('£100000 large company not in profit ', function () {
+      const isSmallCompany = false
+      const isInProfit = false
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(16200).toBe(totalSaving)
+    })
+  })
+
+  describe('Merged Scheme', function () {
+    const startDate = new Date(2025, 0, 1)
+    const endDate = new Date(2025, 11, 31)
+
+    it('£100000 small company in profit', function () {
+      const isSmallCompany = true
+      const isInProfit = true
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(26730).toBe(totalSaving)
+    })
+
+    it('£100000 small company not in profit R&D intensive ', function () {
+      const isSmallCompany = true
+      const isInProfit = false
+      const isTotalSpendOfMoreThan40 = true
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(44500.5).toBe(totalSaving)
+    })
+
+    it('£100000 small company not in profit', function () {
+      const isSmallCompany = true
+      const isInProfit = false
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(26730).toBe(totalSaving)
+    })
+
+    it('£100000 large company in profit ', function () {
+      const isSmallCompany = false
+      const isInProfit = true
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(24750).toBe(totalSaving)
+    })
+
+    it('£100000 large company not in profit ', function () {
+      const isSmallCompany = false
+      const isInProfit = false
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(24750).toBe(totalSaving)
+    })
+  })
+
+  describe('SME & RDEC Schemes Old Rates + New Rates (rate change 01/04/24)', function () {
+    const startDate = new Date(2022, 6, 1)
+    const endDate = new Date(2023, 5, 30)
+
+    it('£100000 small company in profit', function () {
+      const isSmallCompany = true
+      const isInProfit = true
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(39449.51).toBe(totalSaving)
+    })
+
+    it('£100000 small company not in profit R&D intensive ', function () {
+      const isSmallCompany = true
+      const isInProfit = false
+      const isTotalSpendOfMoreThan40 = true
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(52424.67).toBe(totalSaving)
+    })
+
+    it('£100000 small company not in profit', function () {
+      const isSmallCompany = true
+      const isInProfit = false
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(49009.99).toBe(totalSaving)
+    })
+
+    it('£100000 large company in profit ', function () {
+      const isSmallCompany = false
+      const isInProfit = true
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(11909.34).toBe(totalSaving)
+    })
+
+    it('£100000 large company not in profit ', function () {
+      const isSmallCompany = false
+      const isInProfit = false
+      const isTotalSpendOfMoreThan40 = false
+
+      const totalSaving = calculator.calculateRDTaxSaving(
+        startDate,
+        endDate,
+        100000,
+        100000,
+        isSmallCompany,
+        isInProfit,
+        isTotalSpendOfMoreThan40
+      )
+
+      expect(11909.34).toBe(totalSaving)
+    })
+  })
+
+</script>

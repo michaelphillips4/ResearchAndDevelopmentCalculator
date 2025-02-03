@@ -6,8 +6,8 @@ The R&D tax credit calculator will provide an estimate of the corporation tax sa
 
 - [x] **Client Details:** Jones Woods Accounting
 
-- [x] **Requirements:** to create a cacluator that can be added to a exisitng system. It needs to be deployed to an existing site that dosnet haven node etc.
-this is the reason it it uses angular via a cdn.
+- [x] **Requirements:** A stand alone cacluator that can be added to a exisitng system. To be deployed to a site that does not have node etc.
+This is the reason it it uses angular via a cdn.
 
 - [x] **Testing:** due to the nature of the calculations and the lack of node or a proper dev environemnt see the tests in jasmine also used via a cdn.
 
